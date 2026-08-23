@@ -245,6 +245,59 @@
     .case-copy h3 { font-size: 1.12rem; letter-spacing: -.015em; }
     .case-copy p { margin-top: 9px; color: var(--muted); font-size: .9rem; }
 
+    /* Savings comparison */
+    .savings-section { background: var(--navy); color: var(--white); }
+    .savings-head {
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 60px;
+      align-items: end; margin-bottom: 42px;
+    }
+    .savings-head p { color: #c8d6e4; max-width: 590px; }
+    .savings-panel {
+      overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 22px;
+      background: rgba(255,255,255,.055); box-shadow: 0 24px 70px rgba(0,0,0,.18);
+    }
+    .savings-panel-title {
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      padding: 24px 28px; border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .savings-panel-title h3 { font-size: clamp(1.3rem, 2.4vw, 1.85rem); }
+    .savings-panel-title span {
+      flex: 0 0 auto; padding: 7px 11px; border-radius: 999px;
+      background: rgba(249,115,22,.16); color: #ffb47f; font-size: .75rem;
+      font-weight: 900; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .comparison-grid { display: grid; grid-template-columns: 1.05fr 1fr 1fr; }
+    .comparison-col { padding: 28px; }
+    .comparison-col + .comparison-col { border-left: 1px solid rgba(255,255,255,.12); }
+    .comparison-col.highlight { background: rgba(249,115,22,.1); }
+    .comparison-label {
+      display: block; margin-bottom: 19px; color: #9fb1c3; font-size: .76rem;
+      font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .comparison-list { display: grid; gap: 20px; }
+    .comparison-item small { display: block; color: #9fb1c3; font-size: .78rem; }
+    .comparison-item strong { display: block; margin-top: 3px; font-size: 1.16rem; line-height: 1.25; }
+    .comparison-col.highlight .comparison-item strong { color: #ffb47f; }
+    .savings-metrics {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;
+      margin-top: 18px;
+    }
+    .savings-metric {
+      min-width: 0; padding: 24px; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px; background: rgba(255,255,255,.045);
+    }
+    .savings-metric strong {
+      display: block; color: var(--orange); font-size: clamp(1.65rem, 3vw, 2.35rem);
+      line-height: 1; letter-spacing: -.04em;
+    }
+    .savings-metric span { display: block; margin-top: 10px; color: #d8e3ed; font-size: .88rem; }
+    .savings-assumptions {
+      display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center;
+      margin-top: 30px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.13);
+    }
+    .savings-assumptions p { color: #9fb1c3; font-size: .79rem; max-width: 900px; }
+    .savings-assumptions strong { color: #dce6ef; }
+
     /* Quote */
     .quote-wrap { display: grid; grid-template-columns: .85fr 1.15fr; gap: 56px; align-items: start; }
     .contact-card {
@@ -307,7 +360,7 @@
       .nav-links.open { display: flex; }
       .menu-btn { display: block; }
       .desktop-cta { display: none; }
-      .section-head, .quote-wrap, .planning { grid-template-columns: 1fr; }
+      .section-head, .quote-wrap, .planning, .savings-head { grid-template-columns: 1fr; }
       .feature-grid, .industry-grid { grid-template-columns: repeat(2, 1fr); }
       .products-grid { grid-template-columns: repeat(2, 1fr); }
       .planning-image { min-height: 360px; }
@@ -316,6 +369,7 @@
       .gallery .wide { grid-column: span 1; }
       .case-study-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .case-card.featured { grid-column: span 2; }
+      .savings-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 680px) {
@@ -339,6 +393,13 @@
       .case-study-grid { grid-template-columns: 1fr; }
       .case-card.featured { grid-column: span 1; }
       .case-card img, .case-card.featured img { height: 270px; }
+      .savings-head { gap: 18px; }
+      .savings-panel-title { display: block; padding: 22px; }
+      .savings-panel-title span { display: inline-flex; margin-top: 13px; }
+      .comparison-grid, .savings-metrics { grid-template-columns: 1fr; }
+      .comparison-col { padding: 22px; }
+      .comparison-col + .comparison-col { border-left: 0; border-top: 1px solid rgba(255,255,255,.12); }
+      .savings-assumptions { grid-template-columns: 1fr; }
       .footer-grid { gap: 34px; }
       .copyright { flex-direction: column; }
       .floating { right: 14px; bottom: 14px; }
@@ -369,6 +430,7 @@
         <a href="#industries">Applications</a>
         <a href="#planning">Warehouse Planning</a>
         <a href="#projects">Projects</a>
+        <a href="#savings">Savings</a>
         <a href="#about">About</a>
         <a href="#quote">Contact</a>
       </nav>
@@ -717,6 +779,112 @@
               <p>Wide open rack levels organize elongated products that are difficult to handle in standard shelving.</p>
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section savings-section" id="savings">
+      <div class="container">
+        <div class="savings-head">
+          <div>
+            <span class="eyebrow">Illustrative Business Case</span>
+            <h2>More capacity. Less occupied space.</h2>
+          </div>
+          <p>
+            A four-level portable rack layout can use warehouse height to reduce the floor area
+            required for the same pallet inventory. Here is one practical planning scenario.
+          </p>
+        </div>
+
+        <div class="savings-panel">
+          <div class="savings-panel-title">
+            <h3>Store approximately 450 standard pallet loads</h3>
+            <span>10,000 sq ft example</span>
+          </div>
+          <div class="comparison-grid">
+            <div class="comparison-col">
+              <span class="comparison-label">Without racks</span>
+              <div class="comparison-list">
+                <div class="comparison-item">
+                  <small>Warehouse footprint</small>
+                  <strong>10,000 sq ft</strong>
+                </div>
+                <div class="comparison-item">
+                  <small>Monthly occupancy cost</small>
+                  <strong>CAD 20,000</strong>
+                </div>
+                <div class="comparison-item">
+                  <small>Storage method</small>
+                  <strong>Floor storage</strong>
+                </div>
+              </div>
+            </div>
+            <div class="comparison-col">
+              <span class="comparison-label">With four-level StackRack</span>
+              <div class="comparison-list">
+                <div class="comparison-item">
+                  <small>Estimated footprint</small>
+                  <strong>3,767 sq ft</strong>
+                </div>
+                <div class="comparison-item">
+                  <small>Monthly occupancy cost</small>
+                  <strong>CAD 7,533</strong>
+                </div>
+                <div class="comparison-item">
+                  <small>Rack investment</small>
+                  <strong>113 racks · CAD 45,087</strong>
+                </div>
+              </div>
+            </div>
+            <div class="comparison-col highlight">
+              <span class="comparison-label">Estimated impact</span>
+              <div class="comparison-list">
+                <div class="comparison-item">
+                  <small>Floor area released</small>
+                  <strong>6,233 sq ft</strong>
+                </div>
+                <div class="comparison-item">
+                  <small>Monthly occupancy savings</small>
+                  <strong>CAD 12,467</strong>
+                </div>
+                <div class="comparison-item">
+                  <small>Simple payback</small>
+                  <strong>Approx. 3.6 months</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="savings-metrics" aria-label="Estimated savings summary">
+          <div class="savings-metric">
+            <strong>CAD 149,600</strong>
+            <span>estimated annual occupancy savings</span>
+          </div>
+          <div class="savings-metric">
+            <strong>CAD 104,513</strong>
+            <span>estimated first-year net savings after rack investment</span>
+          </div>
+          <div class="savings-metric">
+            <strong>CAD 702,913</strong>
+            <span>estimated five-year net savings</span>
+          </div>
+          <div class="savings-metric">
+            <strong>2.67×</strong>
+            <span>potential pallet capacity in the same 10,000 sq ft</span>
+          </div>
+        </div>
+
+        <div class="savings-assumptions">
+          <p>
+            <strong>Planning assumptions:</strong> CAD 2/sq ft/month average occupancy cost, 60% storage
+            utilization, standard 48 × 40 in pallets, approximately 5 × 4 ft rack footprint, CAD 399 per rack
+            and four pallet levels. Illustrative estimate only—not a guarantee. Results depend on clear height,
+            layout, load profile and local requirements. Freight, installation, tax, handling equipment,
+            insurance and building modifications are excluded. Floor capacity, sprinkler clearances, aisle widths,
+            rack ratings and safe stacking must be confirmed by qualified professionals.
+          </p>
+          <a class="btn btn-primary" href="#quote">Request a Layout Review</a>
         </div>
       </div>
     </section>
