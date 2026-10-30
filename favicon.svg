@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="StackRack">
-  <rect width="64" height="64" rx="13" fill="#0b2035"/>
-  <rect x="2.5" y="2.5" width="59" height="59" rx="11" fill="none" stroke="#31465a" stroke-width="5"/>
-  <path d="M18 14v36h28V14M18 31h28" fill="none" stroke="#f97316" stroke-width="6" stroke-linejoin="miter"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" rx="10" fill="#0b2035"/><path d="M10.5 8.5v11h23v-11M10.5 24v11.5h23V24" fill="none" stroke="#f97316" stroke-width="3.4" stroke-linejoin="round"/></svg>

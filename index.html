@@ -6,8 +6,9 @@
   <title>Portable Stacking Racks Canada | StackRack Canada</title>
   <meta name="description" content="StackRack Canada supplies heavy-duty portable stacking racks, cold-storage racks, material cages, wire mesh containers and custom warehouse storage systems across Canada." />
   <meta name="theme-color" content="#0b2035" />
-  <link rel="icon" type="image/png" sizes="32x32" href="stackrack-tab-icon-v2.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="stackrack-touch-icon-v2.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="stackrack-tab-icon-v3.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="stackrack-touch-icon-v3.png" />
   <link rel="canonical" href="https://stackrack.ca/" />
   <link rel="preload" as="image" href="assets/customer-cases/cold-storage-produce.webp" fetchpriority="high" />
   <meta property="og:type" content="website" />
@@ -28,7 +29,7 @@
     "@type": "Store",
     "name": "StackRack Canada",
     "url": "https://stackrack.ca/",
-    "logo": "https://stackrack.ca/stackrack-touch-icon-v2.png",
+    "logo": "https://stackrack.ca/stackrack-touch-icon-v3.png",
     "image": "https://stackrack.ca/og-image.jpg",
     "description": "Heavy-duty portable stacking racks and custom warehouse storage systems across Canada.",
     "email": "sales@stackrack.ca",
@@ -143,18 +144,12 @@
       position: relative;
     }
     .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: -.03em; flex: 0 0 auto; }
-    .mark {
-      width: 44px; height: 44px; border-radius: 10px; background: var(--navy);
-      position: relative; box-shadow: inset 0 0 0 2px rgba(255,255,255,.08);
-    }
-    .mark::before, .mark::after {
-      content: ""; position: absolute; border: 3px solid var(--orange); border-top: 0;
-      width: 20px; height: 11px; left: 10px;
-    }
-    .mark::before { top: 9px; }
-    .mark::after { top: 23px; }
+    .mark { width: 44px; height: 44px; flex: 0 0 auto; }
+    .mark svg { display: block; width: 100%; height: 100%; }
+    .brand-copy { display: flex; flex-direction: column; align-items: center; }
     .brand-copy strong { display: block; font-size: 1.08rem; color: var(--navy); }
-    .brand-copy small { display: block; color: var(--orange); letter-spacing: .16em; font-size: .62rem; }
+    /* padding-left offsets the trailing letter-spacing so CANADA sits optically centred */
+    .brand-copy small { display: block; color: var(--orange); letter-spacing: .2em; padding-left: .2em; font-size: .62rem; }
     .nav-links { display: flex; align-items: center; gap: 22px; font-weight: 700; font-size: .93rem; }
     .nav-links a { position: relative; padding: 6px 0; white-space: nowrap; }
     .nav-links a:hover, .nav-links a[aria-current="true"] { color: var(--orange); }
@@ -474,6 +469,7 @@
     footer p, footer a { color: #aebdca; }
     footer a:hover { color: var(--orange); }
     footer .brand-copy strong { color: var(--white); }
+    footer .mark rect { stroke: #1d3550; stroke-width: 1; }
     .footer-links { display: grid; gap: 8px; }
     .footer-contact { display: grid; gap: 8px; font-style: normal; }
     .copyright {
@@ -569,9 +565,6 @@
       .container { width: min(100% - 32px, var(--max)); }
       .desktop-cta { min-height: 42px; padding: 0 14px; font-size: .9rem; }
       .mark { width: 38px; height: 38px; }
-      .mark::before, .mark::after { left: 8px; }
-      .mark::before { top: 6px; }
-      .mark::after { top: 19px; }
       .hero { min-height: 640px; background-position: 65% center; }
       .hero-inner { padding: 64px 0 116px; }
       h1 { font-size: 2.6rem; }
@@ -714,7 +707,7 @@
   <header class="header">
     <div class="container nav">
       <a class="brand" href="#home" aria-label="StackRack Canada home">
-        <span class="mark" aria-hidden="true"></span>
+        <span class="mark" aria-hidden="true"><svg viewBox="0 0 44 44"><rect width="44" height="44" rx="10" fill="#0b2035"/><path d="M10.5 8.5v11h23v-11M10.5 24v11.5h23V24" fill="none" stroke="#f97316" stroke-width="3.4" stroke-linejoin="round"/></svg></span>
         <span class="brand-copy">
           <strong>STACKRACK</strong>
           <small>CANADA</small>
@@ -1415,7 +1408,7 @@
       <div class="footer-grid">
         <div>
           <a class="brand" href="#home" aria-label="StackRack Canada home">
-            <span class="mark" aria-hidden="true"></span>
+            <span class="mark" aria-hidden="true"><svg viewBox="0 0 44 44"><rect width="44" height="44" rx="10" fill="#0b2035"/><path d="M10.5 8.5v11h23v-11M10.5 24v11.5h23V24" fill="none" stroke="#f97316" stroke-width="3.4" stroke-linejoin="round"/></svg></span>
             <span class="brand-copy">
               <strong>STACKRACK</strong>
               <small>CANADA</small>
