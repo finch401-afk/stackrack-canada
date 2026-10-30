@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portable Stacking Racks Canada | StackRack Canada</title>
   <meta name="description" content="StackRack Canada supplies heavy-duty portable stacking racks, cold-storage racks, material cages, wire mesh containers and custom warehouse storage systems across Canada." />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="theme-color" content="#0b2035" />
   <link rel="icon" type="image/png" sizes="32x32" href="stackrack-tab-icon-v2.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="stackrack-touch-icon-v2.png" />
@@ -17,7 +16,10 @@
   <meta property="og:title" content="Portable Stacking Racks Canada | StackRack Canada" />
   <meta property="og:description" content="Heavy-duty portable stacking racks, cold-storage racks, material cages and custom warehouse storage systems across Canada." />
   <meta property="og:url" content="https://stackrack.ca/" />
-  <meta property="og:image" content="https://stackrack.ca/assets/customer-cases/warehouse-capacity-upgrade.webp" />
+  <meta property="og:image" content="https://stackrack.ca/og-image.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Warehouse aisles with cartons stored on multiple portable rack levels" />
   <meta name="twitter:card" content="summary_large_image" />
   <script type="application/ld+json">
@@ -27,7 +29,7 @@
     "name": "StackRack Canada",
     "url": "https://stackrack.ca/",
     "logo": "https://stackrack.ca/stackrack-touch-icon-v2.png",
-    "image": "https://stackrack.ca/assets/customer-cases/warehouse-capacity-upgrade.webp",
+    "image": "https://stackrack.ca/og-image.jpg",
     "description": "Heavy-duty portable stacking racks and custom warehouse storage systems across Canada.",
     "email": "sales@stackrack.ca",
     "telephone": "+1-825-488-5555",
@@ -395,6 +397,29 @@
     .savings-assumptions p { color: #9fb1c3; font-size: .79rem; max-width: 900px; }
     .savings-assumptions strong { color: #dce6ef; }
 
+    /* FAQ */
+    .faq-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: start; }
+    .faq-intro { position: sticky; top: calc(var(--header-h) + 28px); }
+    .faq-intro h2 { margin-top: 10px; }
+    .faq-intro p { color: var(--muted); margin: 18px 0 26px; }
+    .faq-list { border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-item summary {
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 22px 0; cursor: pointer; list-style: none;
+      font-weight: 800; font-size: 1.05rem; color: var(--navy);
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: ""; flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+      background: #fff0e7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 3.5v9M3.5 8h9' fill='none' stroke='%23d95d0c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/14px no-repeat;
+      transition: transform .2s ease;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item summary:hover { color: var(--orange-dark); }
+    .faq-item p { color: var(--muted); padding: 0 48px 24px 0; }
+    .faq-item p a { color: var(--orange-dark); font-weight: 800; text-decoration: underline; }
+
     /* Quote */
     .quote-wrap { display: grid; grid-template-columns: .85fr 1.15fr; gap: 56px; align-items: start; }
     .contact-card {
@@ -435,6 +460,12 @@
       background: #eaf8ef; color: #176735; font-weight: 700;
     }
     .success.show { display: block; }
+    .success.info { background: #eef4fb; color: var(--navy-2); }
+    .success.bad { background: #fdecea; color: #a32020; }
+    .success a { text-decoration: underline; }
+    .success:focus { outline: none; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    button[disabled] { opacity: .7; cursor: progress; }
 
     /* Footer */
     footer { background: #061522; color: #c9d6e2; padding: 58px 0 26px; }
@@ -491,6 +522,8 @@
       .case-card.featured { grid-column: span 2; }
       .savings-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
+      .faq-layout { grid-template-columns: 1fr; gap: 28px; }
+      .faq-intro { position: static; }
     }
 
     /* 3D space calculator */
@@ -586,6 +619,86 @@
       *, *::before, *::after { transition: none !important; animation: none !important; }
     }
   </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do stacking racks need to be anchored to the floor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. StackRack units are free-standing and need no anchoring, uprights or beams. Loaded racks are stacked on top of each other with a forklift, so you can move, add or remove racks whenever your inventory or layout changes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much weight can each rack hold, and how high can they stack?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Load capacity of up to 2,000 kg per rack is available, and racks can be stacked up to five levels high. The right capacity and number of levels depend on the model, your product and your building, so we confirm both for your configuration before you order."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can the racks be used in freezers and cold storage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our cold storage racks are designed for frozen food, meat, produce and refrigerated distribution facilities. Tell us your operating temperature and we will recommend a suitable structure and finish."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens to the racks when they are empty?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Empty racks can be dismantled, folded or nested, depending on the model, so they take up only a fraction of the floor space of a loaded rack. This makes them easy to store during slow seasons or return to a central location."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you make racks in custom sizes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Dimensions, load capacity, finish, colour and structure can all be adapted. Send us your product size, weight and handling method, and we will propose a design that fits, including special racks for tires, glass, doors, batteries and long materials."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What information do you need for a quote or layout?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your warehouse dimensions and clear height (or a floor plan), product size, load weight, approximate quantity and forklift type. With that we can prepare a free preliminary layout, capacity estimate and quotation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you deliver outside Calgary?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We are based in Calgary and support projects across Canada. Delivery cost and timing depend on quantity and destination, and are included in your quotation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much do the racks cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pricing depends on the rack size, load capacity, finish and order quantity. Submit the quote form or call 825-488-5555 and we will send a quotation for your project. You can also download our catalogue (PDF) to compare models."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is stacking loaded racks safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Racks are designed to be stacked within their rated capacity and number of levels. As with any storage system, floor capacity, aisle widths, sprinkler clearances and safe operating procedures for your site must be confirmed by qualified professionals before installation."
+      }
+    }
+  ]
+}
+  </script>
 </head>
 
 <body>
@@ -753,7 +866,7 @@
         <div class="products-grid">
           <article class="product-card">
             <div class="product-image">
-              <img src="assets/products/heavy-duty-stacking-rack.jpg" alt="Heavy-duty stacking rack catalogue page with rack drawings and storage equipment overview" width="900" height="606" loading="lazy" decoding="async" />
+              <img src="assets/products/heavy-duty-stacking-rack.jpg" alt="Blue heavy-duty stacking racks holding cartons several levels high in a warehouse aisle" width="1200" height="808" loading="lazy" decoding="async" />
               <span class="tag">Best Seller</span>
             </div>
             <div class="product-body">
@@ -765,7 +878,7 @@
 
           <article class="product-card">
             <div class="product-image">
-              <img src="assets/products/cold-storage-rack.jpg" alt="Cold storage rack catalogue page with rack drawings and warehouse installation photos" width="900" height="606" loading="lazy" decoding="async" />
+              <img src="assets/products/cold-storage-rack.jpg" alt="Stacking racks loaded with cartons inside an insulated cold-storage room" width="1200" height="808" loading="lazy" decoding="async" />
               <span class="tag">Cold Chain</span>
             </div>
             <div class="product-body">
@@ -777,7 +890,7 @@
 
           <article class="product-card">
             <div class="product-image">
-              <img src="assets/products/fabric-roll-rack.jpg" alt="Fabric and roll rack catalogue page with foldable rack drawings and textile storage photos" width="900" height="606" loading="lazy" decoding="async" />
+              <img src="assets/products/fabric-roll-rack.jpg" alt="Blue fabric roll racks stacked with textile rolls in a warehouse" width="1200" height="808" loading="lazy" decoding="async" />
               <span class="tag">Long Materials</span>
             </div>
             <div class="product-body">
@@ -789,7 +902,7 @@
 
           <article class="product-card">
             <div class="product-image">
-              <img src="assets/products/material-cage.jpg" alt="Material cage catalogue page with foldable cage drawings and warehouse photos" width="900" height="606" loading="lazy" decoding="async" />
+              <img src="assets/products/material-cage.jpg" alt="Foldable steel material cage in front of stacked pink material cages" width="1200" height="808" loading="lazy" decoding="async" />
               <span class="tag">Foldable</span>
             </div>
             <div class="product-body">
@@ -801,7 +914,7 @@
 
           <article class="product-card">
             <div class="product-image">
-              <img src="assets/products/wire-mesh-container.jpg" alt="Wire mesh container catalogue page with container diagrams and stacked storage photos" width="900" height="606" loading="lazy" decoding="async" />
+              <img src="assets/products/wire-mesh-container.jpg" alt="Galvanized wire mesh containers stacked in rows in a warehouse" width="1200" height="808" loading="lazy" decoding="async" />
               <span class="tag">Visible Inventory</span>
             </div>
             <div class="product-body">
@@ -813,7 +926,7 @@
 
           <article class="product-card">
             <div class="product-image">
-              <img src="assets/products/custom-industrial-rack.jpg" alt="Custom industrial rack catalogue page with tire, glass and parts rack examples" width="900" height="606" loading="lazy" decoding="async" />
+              <img src="assets/products/custom-industrial-rack.jpg" alt="Custom blue tire racks stacked several levels high beside a person for scale" width="1200" height="808" loading="lazy" decoding="async" />
               <span class="tag">Made to Order</span>
             </div>
             <div class="product-body">
@@ -1083,16 +1196,16 @@
             <div class="comparison-col">
               <span class="comparison-label">With four-level StackRack</span>
               <dl class="comparison-list">
-                <div class="comparison-item"><dt>Estimated footprint</dt><dd>3,767 sq ft</dd></div>
-                <div class="comparison-item"><dt>Monthly occupancy cost</dt><dd>CAD 7,533</dd></div>
+                <div class="comparison-item"><dt>Estimated footprint</dt><dd>3,695 sq ft</dd></div>
+                <div class="comparison-item"><dt>Monthly occupancy cost</dt><dd>CAD 7,389</dd></div>
                 <div class="comparison-item"><dt>Rack investment</dt><dd>113 four-level units · CAD 45,087</dd></div>
               </dl>
             </div>
             <div class="comparison-col highlight">
               <span class="comparison-label">Estimated impact</span>
               <dl class="comparison-list">
-                <div class="comparison-item"><dt>Floor area released</dt><dd>6,233 sq ft</dd></div>
-                <div class="comparison-item"><dt>Monthly occupancy savings</dt><dd>CAD 12,467</dd></div>
+                <div class="comparison-item"><dt>Floor area released</dt><dd>6,305 sq ft</dd></div>
+                <div class="comparison-item"><dt>Monthly occupancy savings</dt><dd>CAD 12,611</dd></div>
                 <div class="comparison-item"><dt>Simple payback</dt><dd>Approx. 3.6 months</dd></div>
               </dl>
             </div>
@@ -1101,19 +1214,19 @@
 
         <div class="savings-metrics" role="group" aria-label="Estimated savings summary">
           <div class="savings-metric">
-            <strong>CAD 149,600</strong>
+            <strong>CAD 151,330</strong>
             <span>estimated annual occupancy savings</span>
           </div>
           <div class="savings-metric">
-            <strong>CAD 104,513</strong>
+            <strong>CAD 106,243</strong>
             <span>estimated first-year net savings after rack investment</span>
           </div>
           <div class="savings-metric">
-            <strong>CAD 702,913</strong>
+            <strong>CAD 711,564</strong>
             <span>estimated five-year net savings</span>
           </div>
           <div class="savings-metric">
-            <strong>2.67×</strong>
+            <strong>2.7×</strong>
             <span>potential pallet capacity in the same 10,000 sq ft</span>
           </div>
         </div>
@@ -1121,13 +1234,68 @@
         <div class="savings-assumptions">
           <p>
             <strong>Planning assumptions:</strong> CAD 2/sq ft/month average occupancy cost, 60% storage
-            utilization, standard 48 × 40 in pallets, approximately 5 × 4 ft rack footprint, CAD 399 per four-level unit
+            utilization, standard 48 × 40 in pallets, standard StackRack footprint of 1350 × 1350 mm (approx. 19.6 sq ft), CAD 399 per four-level unit
             and four pallet levels. Illustrative estimate only—not a guarantee. Results depend on clear height,
             layout, load profile and local requirements. Freight, installation, tax, handling equipment,
             insurance and building modifications are excluded. Floor capacity, sprinkler clearances, aisle widths,
             rack ratings and safe stacking must be confirmed by qualified professionals.
           </p>
           <a class="btn btn-primary" href="#quote" data-product="Warehouse Layout &amp; Space Planning">Request a Layout Review</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container faq-layout">
+        <div class="faq-intro">
+          <span class="eyebrow">FAQ</span>
+          <h2>Common questions about portable stacking racks.</h2>
+          <p>
+            Quick answers to what warehouse and operations teams usually ask before they order.
+            Don't see your question? Send it with your quote request and we'll reply within one business day.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#quote">Ask a Question</a>
+          </div>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>Do stacking racks need to be anchored to the floor?</summary>
+            <p>No. StackRack units are free-standing and need no anchoring, uprights or beams. Loaded racks are stacked on top of each other with a forklift, so you can move, add or remove racks whenever your inventory or layout changes.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How much weight can each rack hold, and how high can they stack?</summary>
+            <p>Load capacity of up to 2,000 kg per rack is available, and racks can be stacked up to five levels high. The right capacity and number of levels depend on the model, your product and your building, so we confirm both for your configuration before you order.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can the racks be used in freezers and cold storage?</summary>
+            <p>Yes. Our cold storage racks are designed for frozen food, meat, produce and refrigerated distribution facilities. Tell us your operating temperature and we will recommend a suitable structure and finish.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What happens to the racks when they are empty?</summary>
+            <p>Empty racks can be dismantled, folded or nested, depending on the model, so they take up only a fraction of the floor space of a loaded rack. This makes them easy to store during slow seasons or return to a central location.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can you make racks in custom sizes?</summary>
+            <p>Yes. Dimensions, load capacity, finish, colour and structure can all be adapted. Send us your product size, weight and handling method, and we will propose a design that fits, including special racks for tires, glass, doors, batteries and long materials.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What information do you need for a quote or layout?</summary>
+            <p>Your warehouse dimensions and clear height (or a floor plan), product size, load weight, approximate quantity and forklift type. With that we can prepare a free preliminary layout, capacity estimate and quotation.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Do you deliver outside Calgary?</summary>
+            <p>Yes. We are based in Calgary and support projects across Canada. Delivery cost and timing depend on quantity and destination, and are included in your quotation.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How much do the racks cost?</summary>
+            <p>Pricing depends on the rack size, load capacity, finish and order quantity. Submit the quote form or call <a href="tel:+18254885555">825-488-5555</a> and we will send a quotation for your project. You can also <a href="assets/StackRack-Product-Catalogue-2026.pdf" download>download our catalogue (PDF)</a> to compare models.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is stacking loaded racks safe?</summary>
+            <p>Racks are designed to be stacked within their rated capacity and number of levels. As with any storage system, floor capacity, aisle widths, sprinkler clearances and safe operating procedures for your site must be confirmed by qualified professionals before installation.</p>
+          </details>
         </div>
       </div>
     </section>
@@ -1229,11 +1397,12 @@
               <div class="form-actions">
                 <button class="btn btn-primary" type="submit">Request My Quote</button>
                 <p class="form-note">
-                  Opens your email app with these details filled in. You can attach a floor plan before sending.
-                  Prefer to call? <a href="tel:+18254885555">825-488-5555</a>
+                  We reply within one business day. Have a floor plan? Email it to
+                  <a href="mailto:sales@stackrack.ca">sales@stackrack.ca</a> or call <a href="tel:+18254885555">825-488-5555</a>.
                 </p>
               </div>
-              <div class="success" id="successMessage" role="status" aria-live="polite"></div>
+              <label class="hp" aria-hidden="true">Leave this empty <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label>
+              <div class="success" id="successMessage" role="status" aria-live="polite" tabindex="-1"></div>
             </div>
           </div>
         </form>
@@ -1273,6 +1442,7 @@
             <a href="#industries">Applications</a>
             <a href="#planning">Warehouse Planning</a>
             <a href="#projects">Projects</a>
+            <a href="#faq">FAQ</a>
             <a href="assets/StackRack-Product-Catalogue-2026.pdf" download>Download Catalogue</a>
           </div>
         </div>
@@ -1390,43 +1560,90 @@
       lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.close(); });
     }
 
-    // Quote form: validate, then open a pre-filled email
+    // Quote form: validate, then send through Web3Forms (same setup as the SMK site).
+    // FORM_KEY decides which inbox receives enquiries; while it starts with "YOUR_",
+    // the form falls back to opening a pre-filled email instead.
+    const FORM_KEY = '393a9c89-48b2-426b-a450-7b01ce19e5da';
+    const MAIL = '<a href="mailto:sales@stackrack.ca">sales@stackrack.ca</a>';
+    const CALL = '<a href="tel:+18254885555">825-488-5555</a>';
     const form = document.getElementById('quoteForm');
+    const status = document.getElementById('successMessage');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const submitText = submitBtn.textContent;
+    const esc = v => v.replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
+    const setStatus = (kind, html) => { status.className = 'success show ' + kind; status.innerHTML = html; };
     const showError = (input, msg) => {
       input.setAttribute('aria-invalid', msg ? 'true' : 'false');
       document.getElementById(input.id + '-error').textContent = msg;
     };
+    const rules = {
+      name: v => v ? '' : 'Please enter your name.',
+      phone: v => v ? '' : 'Please enter your phone number.',
+      email: v => !v ? 'Please enter your email address.'
+        : /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : 'Please enter a valid email address, for example name@company.ca.'
+    };
+    const check = input => { const msg = rules[input.id](input.value.trim()); showError(input, msg); return !msg; };
+    Object.keys(rules).forEach(id => {
+      const input = document.getElementById(id);
+      input.addEventListener('blur', () => { if (input.value.trim() || input.hasAttribute('aria-invalid')) check(input); });
+      input.addEventListener('input', () => { if (input.getAttribute('aria-invalid') === 'true') check(input); });
+    });
+
+    // Email labels stay fixed so every enquiry arrives in the same format
+    const summary = () => [
+      ['name', 'Name'], ['company', 'Company'], ['phone', 'Phone'], ['email', 'Email'],
+      ['city', 'City / Province'], ['product', 'Product'], ['qty', 'Quantity'],
+      ['load', 'Required load'], ['message', 'Project details']
+    ].map(([n, label]) => { const v = form.elements[n].value.trim(); return v ? label + ': ' + v : ''; })
+      .filter(Boolean).join('\n');
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       let firstInvalid = null;
-      ['name', 'phone', 'email'].forEach(id => {
+      Object.keys(rules).forEach(id => {
         const input = document.getElementById(id);
-        let msg = '';
-        if (!input.value.trim()) msg = 'Please enter your ' + (id === 'name' ? 'name' : id) + '.';
-        else if (!input.checkValidity()) msg = 'Please enter a valid email address.';
-        showError(input, msg);
-        if (msg && !firstInvalid) firstInvalid = input;
+        if (!check(input) && !firstInvalid) firstInvalid = input;
       });
-      if (firstInvalid) { firstInvalid.focus(); return; }
+      if (firstInvalid) { setStatus('bad', 'Please check the highlighted fields.'); firstInvalid.focus(); return; }
+      if (form.elements.botcheck.checked) return;
 
-      const data = new FormData(this);
-      const subject = encodeURIComponent('StackRack Canada Quote Request - ' + (data.get('company') || data.get('name')));
-      const body = encodeURIComponent(
-        'Name: ' + data.get('name') + '\n' +
-        'Company: ' + data.get('company') + '\n' +
-        'Phone: ' + data.get('phone') + '\n' +
-        'Email: ' + data.get('email') + '\n' +
-        'City / Province: ' + data.get('city') + '\n' +
-        'Product: ' + data.get('product') + '\n' +
-        'Quantity: ' + data.get('qty') + '\n' +
-        'Required Load: ' + data.get('load') + '\n\n' +
-        'Project Details:\n' + data.get('message')
-      );
-      const success = document.getElementById('successMessage');
-      success.innerHTML = 'Your email app should open with your quote details. If it doesn’t, email us directly at ' +
-        '<a href="mailto:sales@stackrack.ca">sales@stackrack.ca</a> or call 825-488-5555.';
-      success.classList.add('show');
-      window.location.href = 'mailto:sales@stackrack.ca?subject=' + subject + '&body=' + body;
+      const subject = '[StackRack] Quote request: ' + form.elements.product.value + ' — ' +
+        (form.elements.company.value.trim() || form.elements.name.value.trim());
+
+      if (FORM_KEY.indexOf('YOUR_') === 0) {
+        setStatus('info', '<strong>Your request has not been sent yet.</strong> Your email app should open with these details filled in — press <em>Send</em> there to deliver it. If nothing opens, email ' + MAIL + ' or call ' + CALL + '.');
+        window.location.href = 'mailto:sales@stackrack.ca?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(summary());
+        return;
+      }
+
+      const data = new FormData(form);
+      data.append('access_key', FORM_KEY);
+      data.append('subject', subject);
+      data.append('from_name', 'StackRack website');
+      data.append('replyto', form.elements.email.value.trim());
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      form.setAttribute('aria-busy', 'true');
+      setStatus('info', 'Sending your request…');
+
+      const ctrl = 'AbortController' in window ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 20000) : null;
+      fetch('https://api.web3forms.com/submit', { method: 'POST', body: data, headers: { Accept: 'application/json' }, signal: ctrl ? ctrl.signal : undefined })
+        .then(r => r.json().catch(() => ({})).then(j => ({ ok: r.ok, j })))
+        .then(res => {
+          if (!(res.ok && res.j.success)) throw new Error(res.j.message || 'Submission failed');
+          setStatus('ok', '<strong>Thank you — your request was sent to StackRack.</strong> We will reply to ' +
+            esc(form.elements.email.value.trim()) + ' within one business day. To share a floor plan, email it to ' + MAIL + '.');
+          form.reset();
+        })
+        .catch(() => setStatus('bad', '<strong>Your request could not be sent.</strong> Nothing was lost — your details are still in the form. Please try again, or email ' + MAIL + ' or call ' + CALL + '.'))
+        .then(() => {
+          if (timer) clearTimeout(timer);
+          submitBtn.disabled = false;
+          submitBtn.textContent = submitText;
+          form.removeAttribute('aria-busy');
+          status.focus();
+        });
     });
   </script>
 </body>
