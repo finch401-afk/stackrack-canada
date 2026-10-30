@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StackRack Space Saver</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e9ebea; --panel:#f7f8f7; --text:#1d252c; --muted:#5d6871; --line:#c9cfcc;
+  --steel:#2a5fae; --tape:#f2b705; --tape-ink:#1d252c; --red:#c8402f; --green:#2f8f4e;
+  --scene:#dfe2e0; --floor:#cfd3d0; --grid:#b8beba;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191c; --panel:#1c2125; --text:#e7ebe9; --muted:#9aa5ad; --line:#323a40;
+    --steel:#4f86d1; --tape:#f2b705; --tape-ink:#15191c; --red:#ef6a57; --green:#52c278;
+    --scene:#1a1f23; --floor:#252b30; --grid:#343c42;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191c; --panel:#1c2125; --text:#e7ebe9; --muted:#9aa5ad; --line:#323a40;
+  --steel:#4f86d1; --tape:#f2b705; --tape-ink:#15191c; --red:#ef6a57; --green:#52c278;
+  --scene:#1a1f23; --floor:#252b30; --grid:#343c42;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}
+.app{display:grid;grid-template-columns:1fr 380px;height:100%;min-height:0}
+.stage{position:relative;min-height:0;background:var(--scene);overflow:hidden}
+/* pan-y: a vertical swipe scrolls the page; sideways drags rotate, pinches zoom */
+.stage canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.tag{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:none;white-space:nowrap;
+  font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em;
+  padding:4px 10px;border-radius:3px;color:#fff}
+.tag small{display:block;font-family:"Barlow",sans-serif;font-weight:500;font-size:12px;opacity:.9;letter-spacing:0}
+.tag.no{background:var(--red)}
+.tag.yes{background:var(--steel)}
+.tag.free{background:var(--green)}
+.hint{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:8px;pointer-events:none;
+  font-size:13px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--line);
+  padding:6px 12px 6px 8px;border-radius:999px;transition:opacity .4s}
+.hint::before{content:"⟲";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--tape);color:var(--tape-ink);font-size:14px}
+.hint.hide{opacity:0}
+.toast{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;
+  background:rgba(29,37,44,.88);color:#fff;font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;
+  opacity:0;transition:opacity .25s;white-space:nowrap}
+.toast.show{opacity:1}
+.headline{position:absolute;left:16px;top:14px;right:16px;pointer-events:none;color:var(--text);text-shadow:0 0 14px var(--scene),0 0 4px var(--scene)}
+.headline .big{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:clamp(34px,5.2vw,64px);line-height:.95;letter-spacing:.005em}
+.headline .big em{font-style:normal;color:var(--green)}
+.headline .sub{display:inline-block;margin-top:8px;font-weight:600;font-size:clamp(15px,1.7vw,20px);background:var(--tape);color:var(--tape-ink);padding:3px 10px;border-radius:3px;text-shadow:none;font-variant-numeric:tabular-nums}
+.cta{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:17px;padding:13px 0;border-radius:4px;background:var(--tape);color:var(--tape-ink)}
+.cta:hover{filter:brightness(1.06)}
+
+.panel{background:var(--panel);border-left:1px solid var(--line);padding:24px 24px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:22px}
+h1{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:34px;line-height:1.02;margin:0;letter-spacing:.005em}
+.lede{margin:6px 0 0;color:var(--muted);font-size:15px;max-width:34ch}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label,.field .lbl{font-weight:600;font-size:14px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;border-left:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-weight:600;padding:9px 0;cursor:pointer}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--tape);color:var(--tape-ink)}
+input[type=number]{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
+button:focus-visible,input:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+
+.result{border-top:6px solid var(--tape);padding-top:14px}
+.saved{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:64px;line-height:.95;color:var(--green)}
+.saved-sub{font-size:15px;color:var(--muted);margin-top:4px}
+.rows{display:grid;gap:10px;margin-top:16px}
+.row{display:grid;grid-template-columns:10px 1fr auto;gap:10px;align-items:start}
+.sw{width:10px;height:10px;border-radius:2px;margin-top:6px}
+.row .k{font-weight:600}
+.row .d{font-size:13px;color:var(--muted)}
+.row .v{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.row .v small{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+.ppc{border:1px solid var(--line);border-radius:4px;padding:12px 14px;display:grid;gap:8px}
+.ppc .lbl{font-weight:600;font-size:14px}
+.ppc-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ppc-cols div{display:flex;flex-direction:column}
+.ppc-cols span{font-size:13px;color:var(--muted)}
+.ppc-cols strong{font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.ppc-cols strong small{font-size:13px;font-weight:500;color:var(--muted)}
+.ppc-cols .no strong{color:var(--red);text-decoration:line-through;text-decoration-thickness:2px}
+.ppc-cols .yes strong{color:var(--green)}
+.ppc-year{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ppc-year b{color:var(--text)}
+.ppc-rent{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+.ppc-rent input{width:72px;padding:4px 6px}
+.actions{display:flex;gap:8px}
+.actions button{flex:1;font:inherit;font-weight:600;padding:9px 0;border-radius:4px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text)}
+.actions button.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.warn{font-size:13px;color:var(--muted)}
+.warn b{color:var(--text)}
+.notes{font-size:12px;color:var(--muted);margin:0}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;grid-template-rows:min(56vh,460px) auto;height:auto}
+  .panel{border-left:0;border-top:1px solid var(--line);padding:20px 18px 28px;overflow:visible}
+  h1{font-size:30px}
+  .saved{font-size:54px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+/* Embedded in the homepage: the host page supplies the heading and notes */
+.embed .panel{padding:18px 22px 20px;gap:14px}
+.embed .panel-intro,.embed .notes{display:none}
+.embed .saved{font-size:56px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage">
+    <div class="tag no" id="tagNo"></div>
+    <div class="tag yes" id="tagYes"></div>
+    <div class="tag free" id="tagFree"></div>
+    <div class="hint" id="hint"></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <div class="headline"><div class="big" id="hlBig"></div><div class="sub" id="hlSub"></div></div>
+  </div>
+
+  <aside class="panel">
+    <div class="panel-intro">
+      <h1 id="t-title"></h1>
+      <p class="lede" id="t-lede"></p>
+    </div>
+
+    <div class="field">
+      <span class="lbl" id="t-containers"></span>
+      <div class="seg" id="segContainers">
+        <button data-v="1" aria-pressed="true"></button>
+        <button data-v="2" aria-pressed="false"></button>
+        <button data-v="3" aria-pressed="false"></button>
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="lbl" id="t-layers"></span>
+      <div class="seg" id="segLayers">
+        <button data-v="3" aria-pressed="false"></button>
+        <button data-v="4" aria-pressed="true"></button>
+        <button data-v="5" aria-pressed="false"></button>
+      </div>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <div class="saved" id="savedPct">0%</div>
+      <div class="saved-sub" id="savedSub"></div>
+      <div class="rows">
+        <div class="row">
+          <span class="sw" style="background:var(--red)"></span>
+          <div><div class="k" id="t-without"></div><div class="d" id="dWithout"></div></div>
+          <div class="v" id="vWithout"></div>
+        </div>
+        <div class="row">
+          <span class="sw" style="background:var(--steel)"></span>
+          <div><div class="k" id="t-with"></div><div class="d" id="dWith"></div></div>
+          <div class="v" id="vWith"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ppc" aria-live="polite">
+      <div class="lbl" id="t-ppc"></div>
+      <div class="ppc-cols">
+        <div class="no"><span id="t-ppcNo"></span><strong id="ppcNo"></strong></div>
+        <div class="yes"><span id="t-ppcYes"></span><strong id="ppcYes"></strong></div>
+      </div>
+      <div class="ppc-year" id="ppcYear"></div>
+      <div class="ppc-rent"><label for="rent" id="t-rent"></label><span>$</span><input type="number" id="rent" min="0" step="0.05" value="2.00" inputmode="decimal"><span id="t-rentUnit"></span></div>
+    </div>
+
+    <a class="cta" id="cta" href="./#quote" target="_top"></a>
+
+    <div class="warn" id="warn"></div>
+
+    <div class="actions">
+      <button class="primary" id="btnReplay"></button>
+      <button id="btnReset"></button>
+    </div>
+
+    <p class="notes" id="t-notes"></p>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const EMBED = new URLSearchParams(location.search).has("embed");
+  if(EMBED){ document.documentElement.dataset.theme = "light"; document.body.classList.add("embed"); }
+
+  // ---------- copy ----------
+  const T = {
+    en:{
+      title:"How much floor space do your containers need?",
+      lede:"Compare storing pallets on the floor with stacking them in StackRack.",
+      containers:"40 ft containers", cUnit:n=>n+(n>1?" containers":" container"),
+      layers:"Stacking levels", lUnit:n=>n+" levels",
+      savedSub:(f,m)=>f+" sq ft of floor space released ("+m+" m²)",
+      without:"Without racks", with:"With StackRack",
+      dWithout:n=>n+" pallets stored on the floor, one level",
+      dWith:(s,l)=>s+" stacks, up to "+l+" levels",
+      ppc:"Storage cost per pallet", ppcNo:"Floor storage", ppcYes:"With StackRack", perMonth:" / month",
+      ppcYear:(a,b,p)=>"Per pallet per year: "+a+" → <b>"+b+"</b> · <b>"+p+"% lower</b>",
+      rent:"Based on rent of", rentUnit:"CAD / sq ft / month",
+      warn:(m,f)=>"Stacked height: <b>"+m+" m ("+f+" ft)</b>. Confirm your warehouse clear height.",
+      replay:"Replay", reset:"Reset view", cta:"Request a free layout review",
+      hlBig:p=>"<em>"+p+"%</em> less floor space", hlSub:(a,b)=>a+" sq ft → "+b+" sq ft",
+      hintTouch:"Swipe sideways to rotate · pinch to zoom",
+      hintMouse:z=>"Drag to rotate · "+(z?z+" + scroll":"scroll")+" to zoom",
+      zoomHint:z=>"Hold "+z+" and scroll to zoom",
+      tagFree:"Floor space freed",
+      notes:"Based on 20 standard 48 × 40 in pallets per 40 ft container, floor-stored one level high. Shown with a standard StackRack (1350 × 1350 mm, 2 m per level); custom sizes available. Floor footprint only; aisles excluded. Storage cost covers floor rent only; rack purchase not included. Illustrative estimate, not a guarantee.",
+      tagNo:"Without racks", tagYes:"With StackRack", std:"Standard rack · 1350 × 1350 mm"
+    }
+  };
+
+  // ---------- constants (metres) ----------
+  const PER_CONTAINER = 20;
+  const P_W = 1.016, P_D = 1.219, P_H = 0.14;  // 40 x 48 in pallet
+  const CARGO_H = 1.45;
+  const R = 1.35, RH = 2.0, POST = 0.07;
+  const SQFT = 10.7639;
+
+  const state = { containers:1, layers:4, lang:"en" };
+
+  const $ = id => document.getElementById(id);
+  const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // ---------- three setup ----------
+  const stage = $("stage");
+  const renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 400);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f8c, 0.75));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75);
+  sun.position.set(-14, 26, 18);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  const sc = sun.shadow.camera; sc.left=-22; sc.right=22; sc.top=22; sc.bottom=-22; sc.near=1; sc.far=80;
+  scene.add(sun);
+
+  const floorMat = new THREE.MeshLambertMaterial({ color:0xcccccc });
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), floorMat);
+  floor.rotation.x = -Math.PI/2; floor.receiveShadow = true;
+  scene.add(floor);
+  let grid = null;
+
+  // shared geometry / materials
+  const G = {
+    pallet: new THREE.BoxGeometry(P_W, P_H, P_D),
+    cargo: new THREE.BoxGeometry(P_W-0.04, CARGO_H, P_D-0.04),
+    post: new THREE.CylinderGeometry(0.035, 0.04, RH-0.07, 12),
+    foot: new THREE.CylinderGeometry(0.075, 0.075, 0.07, 16),
+    frameX: new THREE.BoxGeometry(R, 0.07, 0.07),
+    frameZ: new THREE.BoxGeometry(0.07, 0.07, R-0.14),
+    slat: new THREE.CylinderGeometry(0.025, 0.025, R-0.14, 8),
+    sign: new THREE.PlaneGeometry(0.62, 0.36),
+    // warehouse worker for scale (1.75 m)
+    leg: new THREE.CylinderGeometry(0.075, 0.07, 0.84, 10),
+    torso: new THREE.CylinderGeometry(0.2, 0.17, 0.62, 12),
+    arm: new THREE.CylinderGeometry(0.05, 0.045, 0.6, 8),
+    head: new THREE.SphereGeometry(0.115, 16, 12),
+    hat: new THREE.SphereGeometry(0.13, 16, 8, 0, Math.PI*2, 0, Math.PI/2)
+  };
+  const canvasTex = (w, h, draw) => {
+    const c = document.createElement("canvas"); c.width = w; c.height = h; draw(c.getContext("2d"));
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
+  };
+  const signTex = canvasTex(512, 300, x=>{
+    x.fillStyle = "#f4f4f2"; x.fillRect(0,0,512,300);
+    x.strokeStyle = "#c9c9c4"; x.lineWidth = 8; x.strokeRect(4,4,504,292);
+    x.fillStyle = "#c8302a"; x.textAlign = "center";
+    x.font = "bold 78px Arial, Helvetica, sans-serif"; x.fillText("STACKRACK", 256, 145);
+    x.font = "bold 56px Arial, Helvetica, sans-serif"; x.fillText("CANADA", 256, 225);
+  });
+  // carton faces: darker edges + packing tape, replaces per-box edge lines
+  const cartonTex = canvasTex(128, 128, x=>{
+    x.fillStyle = "#d2ab73"; x.fillRect(0,0,128,128);
+    x.fillStyle = "#e2c08c"; x.fillRect(54,0,20,128);
+    x.strokeStyle = "#8d6936"; x.lineWidth = 5; x.strokeRect(2.5,2.5,123,123);
+  });
+  const M = {
+    wood: new THREE.MeshLambertMaterial({ color:0xb7884f }),
+    cargo: new THREE.MeshLambertMaterial({ map:cartonTex }),
+    rack: new THREE.MeshLambertMaterial({ color:0x2a5fae }),
+    post: new THREE.MeshLambertMaterial({ color:0xe6b42e }),
+    sign: new THREE.MeshBasicMaterial({ map:signTex, side:THREE.DoubleSide }),
+    tapeNo: new THREE.MeshBasicMaterial({ color:0xc8402f }),
+    tapeYes: new THREE.MeshBasicMaterial({ color:0xf2b705 }),
+    fillNo: new THREE.MeshBasicMaterial({ color:0xc8402f, transparent:true, opacity:0.14, depthWrite:false }),
+    fillYes: new THREE.MeshBasicMaterial({ color:0x1f4e8c, transparent:true, opacity:0.14, depthWrite:false }),
+    // freed-floor overlay drawn over the floor-stored pallets once the racks have landed
+    freeFill: new THREE.MeshBasicMaterial({ color:0x2f8f4e, transparent:true, opacity:0, depthWrite:false }),
+    freeLine: new THREE.MeshBasicMaterial({ color:0x2f8f4e, transparent:true, opacity:0, depthWrite:false }),
+    needFill: new THREE.MeshBasicMaterial({ color:0x2a5fae, transparent:true, opacity:0, depthWrite:false }),
+    needLine: new THREE.MeshBasicMaterial({ color:0xf2b705, transparent:true, opacity:0, depthWrite:false }),
+    pants: new THREE.MeshLambertMaterial({ color:0x2b3540 }),
+    vest: new THREE.MeshLambertMaterial({ color:0xf26b1d }),
+    skin: new THREE.MeshLambertMaterial({ color:0xd9a77f }),
+    hat: new THREE.MeshLambertMaterial({ color:0xf2b705 })
+  };
+  const OVERLAY = { freeFill:0.42, freeLine:0.95, needFill:0.38, needLine:0.95 };
+
+  // ---------- instanced parts ----------
+  // Every pallet and rack is drawn from one InstancedMesh per part type,
+  // so the scene costs ~10 draw calls instead of thousands.
+  const MAX_N = 3 * PER_CONTAINER;   // largest option: 3 containers
+  const PARTS = {
+    pallet: { g:G.pallet, m:M.wood,  cap:MAX_N*2, cast:true, recv:true },
+    cargo:  { g:G.cargo,  m:M.cargo, cap:MAX_N*2, cast:true, recv:true },
+    foot:   { g:G.foot,   m:M.rack,  cap:MAX_N*4, cast:true },
+    post:   { g:G.post,   m:M.post,  cap:MAX_N*4, cast:true },
+    frameX: { g:G.frameX, m:M.rack,  cap:MAX_N*2, cast:true },
+    frameZ: { g:G.frameZ, m:M.rack,  cap:MAX_N*2, cast:true },
+    slat:   { g:G.slat,   m:M.rack,  cap:MAX_N*8, recv:true },
+    sign:   { g:G.sign,   m:M.sign,  cap:MAX_N }
+  };
+  Object.values(PARTS).forEach(p=>{
+    p.mesh = new THREE.InstancedMesh(p.g, p.m, p.cap);
+    p.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    p.mesh.castShadow = !!p.cast; p.mesh.receiveShadow = !!p.recv;
+    p.mesh.frustumCulled = false;
+    p.mesh.count = 0;
+    scene.add(p.mesh);
+  });
+  const tmp = new THREE.Object3D();
+  const localM = (x, y, z, rz=0) => { tmp.position.set(x,y,z); tmp.rotation.set(0,0,rz); tmp.scale.set(1,1,1); tmp.updateMatrix(); return tmp.matrix.clone(); };
+  const PALLET_LAYOUT = [["pallet", localM(0, P_H/2, 0)], ["cargo", localM(0, P_H + CARGO_H/2, 0)]];
+  const RACK_LAYOUT = (()=>{
+    const L = [], h = R/2 - 0.075, baseY = 0.1, e = R/2 - 0.035;
+    [[-h,-h],[h,-h],[-h,h],[h,h]].forEach(([x,z])=>{
+      L.push(["foot", localM(x, 0.035, z)]);
+      L.push(["post", localM(x, 0.07 + (RH-0.07)/2, z)]);
+    });
+    [e,-e].forEach(z=>L.push(["frameX", localM(0, baseY, z)]));
+    [e,-e].forEach(x=>L.push(["frameZ", localM(x, baseY, 0)]));
+    const nS = 8, span = R - 0.3;
+    for(let i=0;i<nS;i++) L.push(["slat", localM(0, baseY+0.01, -span/2 + i*span/(nS-1), Math.PI/2)]);
+    L.push(["sign", localM(0, 0.95, R/2 - 0.02)]);
+    PALLET_LAYOUT.forEach(([k, m])=>L.push([k, new THREE.Matrix4().makeTranslation(0, baseY + 0.045, 0).multiply(m)]));
+    return L;
+  })();
+  const HIDDEN = new THREE.Matrix4().makeScale(0, 0, 0);
+  const placeM = new THREE.Matrix4(), unitM = new THREE.Matrix4();
+  function setUnit(u, y, show){
+    if(show) unitM.makeTranslation(u.x, y, u.z);
+    for(const [key, idx, local] of u.parts){
+      PARTS[key].mesh.setMatrixAt(idx, show ? placeM.multiplyMatrices(unitM, local) : HIDDEN);
+    }
+  }
+
+  function tapeRect(w, d, tapeMat, fillMat, y=0, t=0.1){
+    const g = new THREE.Group();
+    const fill = new THREE.Mesh(new THREE.PlaneGeometry(w, d), fillMat);
+    fill.rotation.x = -Math.PI/2; fill.position.y = y + 0.004; g.add(fill);
+    const mk = (ww, dd, x, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(ww, dd), tapeMat); m.rotation.x=-Math.PI/2; m.position.set(x,y+0.006,z); g.add(m); };
+    mk(w+t*2, t, 0, -d/2-t/2); mk(w+t*2, t, 0, d/2+t/2);
+    mk(t, d, -w/2-t/2, 0); mk(t, d, w/2+t/2, 0);
+    return g;
+  }
+  const person = (()=>{
+    const g = new THREE.Group();
+    const add = (geo, mat, x, y, z, rz=0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x,y,z); m.rotation.z = rz; m.castShadow = true; g.add(m); };
+    add(G.leg, M.pants, -0.09, 0.42, 0); add(G.leg, M.pants, 0.09, 0.42, 0);
+    add(G.torso, M.vest, 0, 1.15, 0);
+    add(G.arm, M.vest, -0.25, 1.12, 0, 0.12); add(G.arm, M.vest, 0.25, 1.12, 0, -0.12);
+    add(G.head, M.skin, 0, 1.6, 0);
+    add(G.hat, M.hat, 0, 1.64, 0);
+    return g;
+  })();
+
+  // ---------- build ----------
+  const groupNo = new THREE.Group(), groupYes = new THREE.Group();
+  scene.add(groupNo, groupYes);
+  let units = [], t0 = 0, settleAt = 0, introPending = false;
+  let extent = { w:20, d:4, h:8 };
+  const tagPts = { no:new THREE.Vector3(), yes:new THREE.Vector3(), free:new THREE.Vector3() };
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function clear(g){ while(g.children.length){ const c=g.children.pop(); c.traverse(o=>{ if(o.geometry && !Object.values(G).includes(o.geometry)) o.geometry.dispose(); }); } }
+
+  function calc(){
+    const n = state.containers * PER_CONTAINER;
+    const stacks = Math.ceil(n / state.layers);
+    const aNo = n * P_W * P_D;
+    const aYes = stacks * R * R;
+    return { n, stacks, aNo, aYes, saved:aNo-aYes, pct:(1-aYes/aNo)*100, height:Math.min(n,state.layers)*RH };
+  }
+
+  function build(){
+    clear(groupNo); clear(groupYes); units = [];
+    const c = calc(), n = c.n, GAP = 0.06;
+
+    // layout: floor-loaded pallets (left) and StackRack stacks (right)
+    const cols = 10, rows = Math.ceil(n/cols);
+    const sx = P_W+GAP, sz = P_D+GAP;
+    const wNo = cols*sx-GAP, dNo = rows*sz-GAP;
+    const cols2 = Math.min(5, c.stacks), rows2 = Math.ceil(c.stacks/cols2);
+    const s2 = R + 0.04;
+    const wYes = cols2*s2-0.04, dYes = rows2*s2-0.04;
+    const gap = 4, mid = (-(wNo + gap/2) + (wYes + gap/2))/2;
+    groupNo.position.x = -(wNo/2 + gap/2) - mid;
+    groupYes.position.x = (wYes/2 + gap/2) - mid;
+
+    // assign instance slots
+    const used = {}; Object.keys(PARTS).forEach(k=>used[k]=0);
+    const addUnit = (layout, x, y, z, delay) => {
+      const u = { x, z, y, delay, done:false, parts:[] };
+      for(const [key, local] of layout) u.parts.push([key, used[key]++, local]);
+      units.push(u);
+    };
+    for(let i=0;i<n;i++){
+      addUnit(PALLET_LAYOUT, groupNo.position.x - wNo/2 + P_W/2 + (i%cols)*sx, 0, -dNo/2 + P_D/2 + Math.floor(i/cols)*sz, i*28);
+    }
+    let lastDelay = 0;
+    for(let s=0;s<c.stacks;s++){
+      const cnt = Math.min(state.layers, n - s*state.layers);
+      const x = groupYes.position.x - wYes/2 + R/2 + (s%cols2)*s2, z = -dYes/2 + R/2 + Math.floor(s/cols2)*s2;
+      for(let l=0;l<cnt;l++){
+        const delay = 200 + (l*c.stacks + s)*55;
+        addUnit(RACK_LAYOUT, x, l*RH, z, delay);
+        lastDelay = Math.max(lastDelay, delay);
+      }
+    }
+    Object.entries(PARTS).forEach(([k,p])=>{ p.mesh.count = used[k]; });
+    units.forEach(u=>{ if(reduced){ setUnit(u, u.y, true); u.done = true; } else setUnit(u, 0, false); });
+    Object.values(PARTS).forEach(p=>{ p.mesh.instanceMatrix.needsUpdate = true; });
+
+    // floor tape around each area
+    groupNo.add(tapeRect(wNo+0.3, dNo+0.3, M.tapeNo, M.fillNo));
+    groupYes.add(tapeRect(wYes+0.3, dYes+0.3, M.tapeYes, M.fillYes));
+
+    // freed-floor overlay on top of the floor-stored pallets: the back strip (blue, yellow tape)
+    // is the share of floor StackRack needs; the rest (green) is freed
+    const W = wNo+0.3, D = dNo+0.3, ratio = c.aYes / c.aNo, dNeed = D*ratio, dFree = D - dNeed;
+    const top = P_H + CARGO_H + 0.03;
+    const need = tapeRect(W, dNeed, M.needLine, M.needFill, top, 0.08); need.position.z = -D/2 + dNeed/2;
+    const free = tapeRect(W, dFree, M.freeLine, M.freeFill, top + 0.002, 0.08); free.position.z = D/2 - dFree/2;
+    groupNo.add(need, free);
+
+    // worker for scale, standing at the front corner of the StackRack area
+    person.position.set(wYes/2 + 0.75, 0, dYes/2 + 0.55);
+    person.rotation.y = -0.6;
+    groupYes.add(person);
+
+    extent = { w: wNo + gap + wYes + 1.5, d: Math.max(dNo, dYes), h: c.height };
+    tagPts.no.set(groupNo.position.x, top + 0.9, -dNo/2);
+    tagPts.yes.set(groupYes.position.x, c.height + 1.3, -dYes/2);
+    tagPts.free.set(groupNo.position.x, 0, D/2 + 0.35);   // below the front edge of the area
+
+    settleAt = reduced ? 0 : lastDelay + 520;
+    introPending = !reduced && !userMoved;
+    setOverlay(reduced ? 1 : 0);
+    t0 = performance.now();
+    fitCamera(false);
+    updateText();
+    invalidate();
+  }
+  let overlayAlpha = -1;
+  function setOverlay(a){
+    if(a === overlayAlpha) return;
+    overlayAlpha = a;
+    Object.entries(OVERLAY).forEach(([k, max])=>{ M[k].opacity = max * a; });
+    $("tagFree").style.visibility = a > 0.5 ? "visible" : "hidden";
+  }
+
+  // ---------- camera orbit ----------
+  const BASE_THETA = -0.5, INTRO_TURN = 0.35;
+  const orbit = { theta:BASE_THETA, phi:1.02, r:30, target:new THREE.Vector3(0,2,0) };
+  let userMoved = false;
+  function fitCamera(force){
+    const aspect = camera.aspect || 1;
+    const fov = camera.fov*Math.PI/180;
+    const needW = (extent.w+3) / (2*Math.tan(fov/2)*aspect);
+    const needH = (Math.max(extent.h, 4)+extent.d*0.6+2) / (2*Math.tan(fov/2));
+    const r = Math.max(needW, needH) * 1.22;
+    orbit.target.set(0, Math.min(extent.h, 8)*0.45, 0);
+    if(force || !userMoved){ orbit.r = r; orbit.theta = BASE_THETA; orbit.phi = 1.05; }
+  }
+  function applyCamera(){
+    const { r, theta, phi, target } = orbit;
+    camera.position.set(
+      target.x + r*Math.sin(phi)*Math.sin(theta),
+      target.y + r*Math.cos(phi),
+      target.z + r*Math.sin(phi)*Math.cos(theta)
+    );
+    camera.lookAt(target);
+  }
+
+  // ---------- input ----------
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const zoomKey = isMac ? "⌘" : "Ctrl";
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  // When the page around the scene can scroll (embedded, or the stacked phone layout),
+  // a plain wheel scrolls the page; Ctrl/⌘ + wheel (or a trackpad pinch) zooms.
+  const gateWheel = () => EMBED || window.matchMedia("(max-width:860px)").matches;
+  const hint = $("hint"), toast = $("toast");
+  function interacted(){ userMoved = true; introPending = false; hint.classList.add("hide"); }
+  let toastTimer = 0;
+  function showToast(text){
+    toast.textContent = text; toast.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(()=>toast.classList.remove("show"), 1400);
+  }
+
+  const ptrs = new Map(); let pinch0 = 0, r0 = 0;
+  const cv = renderer.domElement;
+  cv.setAttribute("role", "img");
+  cv.addEventListener("pointerdown", e=>{ cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y); r0=orbit.r; } });
+  cv.addEventListener("pointermove", e=>{
+    if(!ptrs.has(e.pointerId)) return;
+    const prev = ptrs.get(e.pointerId); const cur = {x:e.clientX,y:e.clientY}; ptrs.set(e.pointerId,cur);
+    interacted();
+    if(ptrs.size===1){
+      orbit.theta -= (cur.x-prev.x)*0.008;
+      orbit.phi = Math.min(1.45, Math.max(0.25, orbit.phi - (cur.y-prev.y)*0.006));
+    } else if(ptrs.size===2){
+      const [a,b]=[...ptrs.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(pinch0>0) orbit.r = Math.min(120, Math.max(6, r0*pinch0/d));
+    }
+    invalidate();
+  });
+  const up = e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2) pinch0=0; };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("wheel", e=>{
+    if(gateWheel() && !(e.ctrlKey || e.metaKey)){ showToast(T[state.lang].zoomHint(zoomKey)); return; }
+    e.preventDefault(); interacted();
+    const f = Math.min(1.18, Math.max(0.85, Math.pow(1.0015, e.deltaY)));
+    orbit.r = Math.min(120, Math.max(6, orbit.r*f));
+    invalidate();
+  }, {passive:false});
+
+  // ---------- resize / theme ----------
+  function resize(){
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    fitCamera(false);
+    invalidate();
+  }
+  new ResizeObserver(resize).observe(stage);
+
+  function applyTheme(){
+    scene.background = new THREE.Color(css("--scene"));
+    scene.fog = new THREE.Fog(css("--scene"), 70, 160);
+    floorMat.color.set(css("--floor"));
+    if(grid) scene.remove(grid);
+    grid = new THREE.GridHelper(200, 200, css("--grid"), css("--grid"));
+    grid.position.y = 0.002; grid.material.transparent = true; grid.material.opacity = 0.6;
+    scene.add(grid);
+    const steel = css("--steel"); M.rack.color.set(steel); M.fillYes.color.set(steel); M.needFill.color.set(steel);
+    const red = css("--red"); M.tapeNo.color.set(red); M.fillNo.color.set(red);
+    const green = css("--green"); M.freeFill.color.set(green); M.freeLine.color.set(green);
+    invalidate();
+  }
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+
+  // ---------- UI text ----------
+  const fmt = (v,d=1) => v.toLocaleString("en-CA",{minimumFractionDigits:d,maximumFractionDigits:d});
+  function updateText(){
+    const L = T[state.lang], c = calc();
+    $("t-title").textContent = L.title; $("t-lede").textContent = L.lede;
+    $("t-containers").textContent = L.containers; $("t-layers").textContent = L.layers;
+    document.querySelectorAll("#segContainers button").forEach(b=>b.textContent=L.cUnit(+b.dataset.v));
+    document.querySelectorAll("#segLayers button").forEach(b=>b.textContent=L.lUnit(+b.dataset.v));
+    $("t-without").textContent = L.without; $("t-with").textContent = L.with;
+    $("dWithout").textContent = L.dWithout(c.n); $("dWith").textContent = L.dWith(c.stacks, state.layers);
+    $("vWithout").innerHTML = fmt(c.aNo*SQFT,0)+" sq ft<small>"+fmt(c.aNo)+" m²</small>";
+    $("vWith").innerHTML = fmt(c.aYes*SQFT,0)+" sq ft<small>"+fmt(c.aYes)+" m²</small>";
+    $("hlBig").innerHTML = L.hlBig(Math.round(c.pct));
+    $("hlSub").textContent = L.hlSub(fmt(c.aNo*SQFT,0), fmt(c.aYes*SQFT,0));
+    $("cta").textContent = L.cta;
+    $("savedPct").textContent = Math.round(c.pct)+"%";
+    $("savedSub").textContent = L.savedSub(fmt(c.saved*SQFT,0), fmt(c.saved));
+    // Cost per pallet position = floor area each pallet occupies × rent (rack purchase not included)
+    const rent = Math.max(0, parseFloat($("rent").value)||0);
+    const perNo = c.aNo/c.n*SQFT*rent, perYes = c.aYes/c.n*SQFT*rent;
+    $("t-ppc").textContent = L.ppc; $("t-ppcNo").textContent = L.ppcNo; $("t-ppcYes").textContent = L.ppcYes;
+    $("ppcNo").innerHTML = "$"+fmt(perNo,2)+"<small>"+L.perMonth+"</small>";
+    $("ppcYes").innerHTML = "$"+fmt(perYes,2)+"<small>"+L.perMonth+"</small>";
+    $("ppcYear").innerHTML = L.ppcYear("$"+fmt(perNo*12,0), "$"+fmt(perYes*12,0), Math.round((1-perYes/perNo)*100));
+    $("t-rent").textContent = L.rent; $("t-rentUnit").textContent = L.rentUnit;
+    $("warn").innerHTML = L.warn(fmt(c.height,0), fmt(c.height*3.28084,0));
+    $("btnReplay").textContent = L.replay; $("btnReset").textContent = L.reset;
+    hint.textContent = coarse ? L.hintTouch : L.hintMouse(gateWheel() ? zoomKey : "");
+    $("t-notes").textContent = L.notes;
+    $("tagNo").innerHTML = L.tagNo+"<small>"+fmt(c.aNo*SQFT,0)+" sq ft</small>";
+    $("tagYes").innerHTML = L.tagYes+"<small>"+L.std+"</small><small>"+fmt(c.aYes*SQFT,0)+" sq ft</small>";
+    $("tagFree").innerHTML = L.tagFree+"<small>"+fmt(c.saved*SQFT,0)+" sq ft</small>";
+    cv.setAttribute("aria-label", "3D view: "+c.n+" pallets take "+fmt(c.aNo*SQFT,0)+" sq ft on the floor and "+fmt(c.aYes*SQFT,0)+" sq ft in StackRack");
+  }
+
+  function bindSeg(id, key){
+    document.querySelectorAll("#"+id+" button").forEach(b=>b.addEventListener("click",()=>{
+      state[key] = +b.dataset.v;
+      document.querySelectorAll("#"+id+" button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+      userMoved = false; build();
+    }));
+  }
+  bindSeg("segContainers","containers"); bindSeg("segLayers","layers");
+  $("rent").addEventListener("input", updateText);
+  $("btnReplay").addEventListener("click", build);
+  $("btnReset").addEventListener("click", ()=>{ userMoved=false; fitCamera(true); invalidate(); });
+
+  // ---------- frame loop (renders only while something changes) ----------
+  const v = new THREE.Vector3();
+  function placeTag(el, p, below){
+    v.copy(p).project(camera);
+    const w = stage.clientWidth, h = stage.clientHeight;
+    const vis = v.z < 1 && Math.abs(v.x) < 1.2 && Math.abs(v.y) < 1.2;
+    el.style.display = vis ? "block" : "none";
+    el.style.transform = "translate(-50%,"+(below?"0":"-100%")+") translate("+((v.x+1)/2*w)+"px,"+((1-v.y)/2*h)+"px)";
+  }
+  function easeOut(t){ const c1=1.2, c3=c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); }
+  function easeInOut(t){ return t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
+
+  // advances drop animation, overlay fade and intro turn; returns true while anything is still moving
+  function step(now){
+    const el = now - t0;
+    let busy = false, dirty = false;
+    for(const u of units){
+      if(u.done) continue;
+      const t = (el - u.delay)/520;
+      if(t < 0){ busy = true; continue; }
+      if(t >= 1){ setUnit(u, u.y, true); u.done = true; }
+      else { setUnit(u, u.y + 9*(1-easeOut(t)), true); busy = true; }
+      dirty = true;
+    }
+    if(dirty) Object.values(PARTS).forEach(p=>{ p.mesh.instanceMatrix.needsUpdate = true; });
+    if(!reduced){
+      const a = Math.min(1, Math.max(0, (el - settleAt)/600));
+      setOverlay(a); if(a < 1) busy = true;
+    }
+    if(introPending){
+      const ti = (el - settleAt - 300)/2600;
+      if(ti >= 0) orbit.theta = BASE_THETA + INTRO_TURN*easeInOut(Math.min(ti, 1));
+      if(ti >= 1) introPending = false; else busy = true;
+    }
+    return busy;
+  }
+
+  // Embedded: the host page posts visibility; standalone: always visible
+  let visible = !EMBED, started = false, running = false, frameReq = 0;
+  function invalidate(){ if(running && !frameReq) frameReq = requestAnimationFrame(frame); }
+  function frame(now){
+    frameReq = 0;
+    if(!running) return;
+    const busy = step(now);
+    applyCamera();
+    renderer.render(scene, camera);
+    placeTag($("tagNo"), tagPts.no); placeTag($("tagYes"), tagPts.yes); placeTag($("tagFree"), tagPts.free, true);
+    if(busy) invalidate();
+  }
+  function setActive(){
+    const on = visible && !document.hidden;
+    if(on && !started){ started = true; running = true; build(); }
+    if(on && !running){ running = true; invalidate(); }
+    if(!on) running = false;
+  }
+  let heard = false;
+  window.addEventListener("message", e=>{
+    if(e.source !== window.parent || !e.data || e.data.type !== "stackrack-visible") return;
+    heard = true; visible = !!e.data.visible; setActive();
+  });
+  // If the host page never answers (e.g. embedded elsewhere), start anyway
+  if(EMBED) setTimeout(()=>{ if(!heard){ visible = true; setActive(); } }, 3000);
+  document.addEventListener("visibilitychange", setActive);
+
+  applyTheme();
+  resize();
+  updateText();
+  setActive();
+  if(EMBED && window.parent !== window){
+    try{ window.parent.postMessage({ type:"stackrack-ready" }, "*"); }catch(e){}
+  }
+})();
+</script>
+</body>
+</html>

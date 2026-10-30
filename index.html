@@ -492,6 +492,43 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
+    /* 3D space calculator */
+    .calc3d .section-head { margin-bottom: 32px; }
+    .calc3d-frame {
+      position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--line);
+      background: #dfe2e0; box-shadow: var(--shadow); height: 780px;
+    }
+    .calc3d-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+    .calc3d-loading {
+      position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 700;
+    }
+    .calc3d-note { margin-top: 16px; color: var(--muted); font-size: .82rem; max-width: 900px; }
+    .calc3d-note a { color: var(--orange-dark); font-weight: 800; }
+    .calc3d-card {
+      display: none; position: relative; border-radius: 18px; overflow: hidden; background: #dfe2e0;
+      box-shadow: var(--shadow); border: 1px solid var(--line);
+    }
+    .calc3d-card img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+    .calc3d-card-copy {
+      position: absolute; left: 16px; top: 14px; right: 16px; color: var(--ink);
+      text-shadow: 0 0 12px #dfe2e0, 0 0 4px #dfe2e0;
+    }
+    .calc3d-card-copy strong { display: block; font-size: 2rem; line-height: 1; letter-spacing: -.03em; }
+    .calc3d-card-copy strong em { font-style: normal; color: #2f8f4e; }
+    .calc3d-card-copy span { display: inline-block; margin-top: 6px; font-weight: 700; font-size: .9rem; background: #f2b705; padding: 2px 8px; border-radius: 3px; text-shadow: none; }
+    .calc3d-card .btn { display: flex; margin: 0 14px 14px; }
+    /* Option C: dark band between "Why StackRack" (white) and Products (grey) */
+    .calc3d.dark { background: var(--navy); color: var(--white); }
+    .calc3d.dark .section-head p { color: #c8d6e4; }
+    .calc3d.dark .calc3d-frame { border-color: rgba(255,255,255,.14); box-shadow: 0 24px 70px rgba(0,0,0,.28); }
+    .calc3d.dark .calc3d-card { border-color: rgba(255,255,255,.14); }
+    .calc3d.dark .calc3d-note { color: #9fb1c3; }
+    .calc3d.dark .calc3d-note a { color: #ffb47f; }
+    @media (max-width: 920px) {
+      .calc3d-frame { display: none; }
+      .calc3d-card { display: block; }
+    }
+
     @media (max-width: 680px) {
       :root { --header-h: 66px; }
       .topbar { display: none; }
@@ -575,7 +612,7 @@
         <a href="#industries">Applications</a>
         <a href="#planning">Warehouse Planning</a>
         <a href="#projects">Projects</a>
-        <a href="#savings">Savings</a>
+        <a href="#space-calculator">Savings</a>
         <a href="#about">About</a>
         <a href="assets/StackRack-Product-Catalogue-2026.pdf" download>Catalogue (PDF)</a>
         <a href="#quote">Contact</a>
@@ -605,7 +642,7 @@
           <a class="btn btn-primary" href="#quote">Get a Free Quote
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="btn btn-outline" href="#products">View Products</a>
+          <a class="btn btn-outline" href="#space-calculator">See Your Savings in 3D ↓</a>
           <a class="btn btn-outline" href="assets/StackRack-Product-Catalogue-2026.pdf" download>Download Catalogue
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>
             <span class="sr-only">(PDF, 6.8 MB)</span>
@@ -664,6 +701,38 @@
             <p>Dimensions, capacity, finish, colour and structure can be adapted to your products.</p>
           </article>
         </div>
+      </div>
+    </section>
+
+    <section class="section calc3d dark" id="space-calculator">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">3D Space Calculator</span>
+            <h2>See how much floor space you get back.</h2>
+          </div>
+          <p>
+            Pick how many 40 ft containers you unload and how high you stack. Watch pallets land on the
+            floor next to the same load in StackRack — then drag to look around.
+          </p>
+        </div>
+
+        <div class="calc3d-frame">
+          <div class="calc3d-loading" aria-hidden="true">Loading 3D view…</div>
+          <iframe id="calcFrame" data-src="space-calculator.html?embed=1" title="StackRack 3D floor space calculator" loading="lazy"></iframe>
+        </div>
+
+        <a class="calc3d-card" href="space-calculator.html">
+          <img src="assets/space-calculator-preview.jpg" alt="3D view comparing pallets stored on the floor with the same pallets stacked in StackRack racks" width="1200" height="750" loading="lazy" decoding="async" />
+          <div class="calc3d-card-copy"><strong><em>63%</em> less floor space</strong><span>1 container · 4 levels</span></div>
+          <span class="btn btn-primary">Open the 3D calculator →</span>
+        </a>
+
+        <p class="calc3d-note">
+          Based on 20 standard 48 × 40 in pallets per 40 ft container, floor-stored one level high, and a standard
+          StackRack (1350 × 1350 mm, 2 m per level). Floor footprint only; aisles excluded. Storage cost per pallet covers floor rent only; rack purchase not included. Illustrative estimate, not a guarantee.
+          <a href="space-calculator.html" target="_blank" rel="noopener">Open full screen ↗</a>
+        </p>
       </div>
     </section>
 
@@ -1252,6 +1321,34 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && navLinks.classList.contains('open')) { setMenu(false); menuBtn.focus(); } });
     document.addEventListener('click', e => { if (!e.target.closest('.nav')) setMenu(false); });
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 3D calculator: load the iframe only on wide screens when it nears the viewport,
+    // and tell it when it is visible so it only animates on screen
+    const calcFrame = document.getElementById('calcFrame');
+    const wideScreen = window.matchMedia('(min-width: 921px)');
+    if (calcFrame && 'IntersectionObserver' in window) {
+      // '*' so this also works when the page is opened as a local file (origin "null");
+      // the message only carries a visible/hidden flag
+      const post = (visible) => {
+        try { calcFrame.contentWindow.postMessage({ type: 'stackrack-visible', visible }, '*'); } catch (e) {}
+      };
+      let onScreen = false;
+      new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting && !calcFrame.src && wideScreen.matches) calcFrame.src = calcFrame.dataset.src;
+      }), { rootMargin: '600px 0px' }).observe(calcFrame);
+      new IntersectionObserver(entries => entries.forEach(entry => {
+        onScreen = entry.isIntersecting; post(onScreen);
+      }), { threshold: 0.35 }).observe(calcFrame);
+      // The calculator announces itself when ready (also after a browser restores the frame)
+      window.addEventListener('message', e => {
+        if (e.source !== calcFrame.contentWindow || !e.data || e.data.type !== 'stackrack-ready') return;
+        calcFrame.previousElementSibling.style.display = 'none';
+        post(onScreen);
+      });
+      calcFrame.addEventListener('load', () => {
+        if (calcFrame.getAttribute('src')) { calcFrame.previousElementSibling.style.display = 'none'; post(onScreen); }
+      });
+    }
 
     // Highlight the nav link for the section in view; hide floating buttons over the quote form
     const floating = document.getElementById('floating');
